@@ -1,11 +1,27 @@
+import 'babel-polyfill'
 import Vue from 'vue'
-import App from './App.vue'
-import store from './store'
 import router from './router'
+import VueFetch, {$fetch} from './plugins/fetch'
+import store from './store/index'
+import App from './App'
+import * as filters from './filters'
 
-new Vue({
-  el: '#app',
-  render: h => h(App),
-  router,
-  store
+for (const key in filters) {
+  Vue.filter(key, filters[key])
+}
+
+Vue.use(VueFetch, {
+  baseUrl: 'http://localhost:3000/'
 })
+
+function main () {
+  new Vue({
+    el: '#app',
+    render: h => h(App),
+    router,
+    store
+  })
+}
+
+main()
+

@@ -1,6 +1,5 @@
 <template>
   <div class="welcome">
-    qweqweqweqwe
     <h1>Welcome</h1>
     <div class="actions">
       <button @click="openGoogleSignin">
@@ -11,12 +10,38 @@
 </template>
 
 <script>
+import {mapActions} from 'vuex'
+
 export default {
   name: 'login',
   methods: {
+    /* ...mapActions([
+      'login'
+    ]), */
+    login (){
+      this.$store.dispatch('login')
+      alert('login')
+    },
     openGoogleSignin(){
-
+      const url = "http://localhost:3000/auth/google"
+      const name = 'google_login'
+      const specs = 'width=500,height=500'
+      window.open(url,name,specs)
+    },
+    handleMessage({data,origin}){
+      if(origin !== 'http://localhost:3000'){
+        return
+      }
+      if(data === 'success'){
+        this.login()
+      }
     }
+  },
+  mounted () {
+    window.addEventListener('message',this.handleMessage)
+  },
+  beforeDestroy (){
+    window.removeEventListener('message',this.handleMessage)
   }
 }
 </script>
